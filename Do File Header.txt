@@ -1,0 +1,16 @@
+//Front Matter
+{
+//Initialize
+set more off
+cap log close
+clear
+ 
+//Macros
+{
+//Filepaths
+global longleaf "/proj/schleduc/"
+global wake "${longleaf}wake/"
+global logs "${wake}logs/"
+global data "${wake}data/"
+global fromwake "${data}original_xfer/"
+global scratch "${wake}scratch/"
