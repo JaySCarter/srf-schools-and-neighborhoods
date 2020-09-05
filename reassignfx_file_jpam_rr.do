@@ -176,11 +176,17 @@ bys sch_assigned year: egen n_here = count(node_reassigned)
 bys lag_sch_assigned year: egen n_out = total(node_reassigned)
 bys lag_sch_assigned year: egen n_wuz_here = count(node_reassigned)
 
+
+//Spillover Terms
 gen p_in = n_in / n_here
 gen p_out = n_out / n_wuz_here
 
 replace p_in = 0 if node_reassigned == 1
 replace p_out = 0 if node_reassigned == 1 
+
+//Quadratic for Spillover Terms
+gen p_in2 = p_in * p_in
+gen p_out2 = p_out * p_out
 
 gen p_in_never = p_in
 gen p_out_never = p_out
@@ -241,6 +247,7 @@ gen pabs = abs_total/membership_days
 
 gen psusp = sus_days/membership_days
 gen chron_abs = (pabs > 0.05 & !missing(pabs))
+replace chron_abs = . if year < 2005
 gen dsusp =(sus_days > 0  & !missing(sus_days))
 
 label variable pabs "Proportion of school days absent"
@@ -313,7 +320,6 @@ forvalues x = 1/4 {
 
 gen never_reassigned_attend_base = never_reassigned * attend_base
 
-
 //Some renaming for variable length
 rename sch_att_distance sch_att_dist
 rename sch_ass_distance sch_ass_dist
@@ -321,6 +327,16 @@ rename sch_ass_distance sch_ass_dist
 label variable sch_att_dist "Distance from student home to attended school"
 label variable sch_ass_dist "Distance from student home to assigned school"
 
+//Get Reassignment Year
+cap frame drop nodes
+cap frame create nodes
+cap drop link_node
+
+frame nodes: use "${data}srf_nodes_file.dta", clear
+frlink m:1 nodeid year grade_level, frame(nodes) gen(link_node)
+frget reassignment_year_1, from(link_node)
+
+tab reassignment_year_1, gen(re_yr_)
 
 note: Updated `date_time'
 
@@ -329,5 +345,3 @@ save "${scratch}reassignfx_file.dta", replace
 
 save "${jpam_rr}reassignfx_rr_`date_time'.dta", replace
 save "${jpam_rr}reassignfx_rr.dta", replace
-
-cap log close
