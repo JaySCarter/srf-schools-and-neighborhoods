@@ -35,6 +35,7 @@ cap frame change default
 //Locals
 local date_time "191205_1000"
 local date_time "200905_0900"
+local date_time "200918_1400"
 
 **Grade and Race Control Dummies
 forvalues x = 0/12	{
@@ -339,9 +340,10 @@ frget reassignment_year_1, from(link_node)
 tab reassignment_year_1, gen(re_yr_)
 
 note: Updated `date_time'
-
+/*
 save "${scratch}reassignfx_`date_time'.dta", replace
 save "${scratch}reassignfx_file.dta", replace
+*/
 
 save "${jpam_rr}reassignfx_rr_`date_time'.dta", replace
 save "${jpam_rr}reassignfx_rr.dta", replace
