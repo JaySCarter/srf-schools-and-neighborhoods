@@ -220,8 +220,8 @@ gen race_sm_ass=.
 gen race_sm_att=.
 
 forvalues x= 3/5 {
-	replace race_sm_ass=race_`x'_assigned if d_race_`x'==1
-	replace race_sm_att=race_`x'_attend if d_race_`x'==1
+	replace race_sm_ass=race_`x'_ass if d_race_`x'==1
+	replace race_sm_att=race_`x'_att if d_race_`x'==1
 }
 
 label variable race_sm_ass "Proportion of students in assigned school of the same race as individual"
